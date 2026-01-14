@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="liqgui - Glassmorphism UI components with spring physics animations">
+  <title>liqgui - Documentation</title>
+  <link rel="stylesheet" href="../src/styles/tokens.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --doc-sidebar-width: 260px;
+      --doc-header-height: 64px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', var(--lg-font);
+      font-size: 0.95rem;
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
+      color: #e4e4e7;
+      line-height: 1.7;
+    }
+
+    code,
+    pre {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Background Effects */
+    .bg-effects {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.3;
+      animation: float 25s ease-in-out infinite;
+    }
+
+    .orb-1 {
+      width: 600px;
+      height: 600px;
+      background: linear-gradient(135deg, #5ac8fa, #007aff);
+      top: -300px;
+      right: -200px;
+    }
+
+    .orb-2 {
+      width: 500px;
+      height: 500px;
+      background: linear-gradient(135deg, #bf5af2, #5856d6);
+      bottom: -200px;
+      left: -150px;
+      animation-delay: -10s;
+    }
+
+    .orb-3 {
+      width: 350px;
+      height: 350px;
+      background: linear-gradient(135deg, #30d158, #00c7be);
+      top: 50%;
+      left: 40%;
+      animation-delay: -18s;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      33% {
+        transform: translate(40px, -40px) scale(1.08);
+      }
+
+      66% {
+        transform: translate(-30px, 30px) scale(0.95);
+      }
+    }
+
+    /* Header */
+    .doc-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--doc-header-height);
+      background: rgba(10, 10, 15, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+    }
+
+    .doc-header-brand {
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .doc-header-brand span {
+      background: linear-gradient(135deg, #5ac8fa, #bf5af2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .doc-header-nav {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .doc-header-nav a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .doc-header-nav a:hover {
+      color: white;
+    }
+
+    /* Sidebar */
+    .doc-sidebar {
+      position: fixed;
+      top: var(--doc-header-height);
+      left: 0;
+      width: var(--doc-sidebar-width);
+      height: calc(100vh - var(--doc-header-height));
+      background: rgba(10, 10, 15, 0.5);
+      backdrop-filter: blur(10px);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 1.5rem;
+      overflow-y: auto;
+      z-index: 100;
+    }
+
+    .doc-sidebar-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .doc-sidebar-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 0.75rem;
+    }
+
+    .doc-sidebar-link {
+      display: block;
+      padding: 0.5rem 0.75rem;
+      margin: 0.15rem 0;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 0.875rem;
+      border-radius: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .doc-sidebar-link:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+    }
+
+    .doc-sidebar-link.active {
+      background: rgba(90, 200, 250, 0.15);
+      color: #5ac8fa;
+    }
+
+    /* Main Content */
+    .doc-main {
+      margin-left: var(--doc-sidebar-width);
+      margin-top: var(--doc-header-height);
+      padding: 3rem 4rem;
+      max-width: 900px;
+    }
+
+    /* Hero */
+    .doc-hero {
+      text-align: center;
+      padding: 4rem 0 5rem;
+      margin-left: calc(-1 * var(--doc-sidebar-width));
+      margin-right: -4rem;
+      margin-top: -3rem;
+      padding-left: var(--doc-sidebar-width);
+      background: linear-gradient(180deg, rgba(90, 200, 250, 0.08) 0%, transparent 100%);
+    }
+
+    .doc-hero h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 0%, #5ac8fa 50%, #bf5af2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+    }
+
+    .doc-hero p {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.6);
+      max-width: 500px;
+      margin: 0 auto 2rem;
+    }
+
+    .doc-hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .doc-hero-stats {
+      display: flex;
+      gap: 3rem;
+      justify-content: center;
+      margin-top: 3rem;
+    }
+
+    .doc-hero-stat {
+      text-align: center;
+    }
+
+    .doc-hero-stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #5ac8fa;
+    }
+
+    .doc-hero-stat-label {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Section Styles */
+    .doc-section {
+      margin-bottom: 4rem;
+      scroll-margin-top: calc(var(--doc-header-height) + 2rem);
+    }
+
+    .doc-section h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .doc-section h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 2rem 0 1rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .doc-section p {
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 1rem;
+    }
+
+    /* Demo Box */
+    .demo-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--lg-radius);
+      padding: 2rem;
+      margin: 1.5rem 0;
+    }
+
+    .demo-box-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 1rem;
+    }
+
+    .demo-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 1rem 0;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    /* Code Block */
+    .code-block {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    .code-block code {
+      color: #e4e4e7;
+    }
+
+    .code-tag {
+      color: #7dd3fc;
+    }
+
+    .code-attr {
+      color: #c4b5fd;
+    }
+
+    .code-string {
+      color: #86efac;
+    }
+
+    .code-comment {
+      color: #6b7280;
+    }
+
+    /* Component Card */
+    .component-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--lg-radius);
+      padding: 1.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .component-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .component-card h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .component-card p {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 1rem;
+    }
+
+    /* Table */
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+
+    .doc-table th,
+    .doc-table td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .doc-table th {
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .doc-table td code {
+      background: rgba(90, 200, 250, 0.15);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: #5ac8fa;
+    }
+
+    /* Footer */
+    .doc-footer {
+      margin-top: 4rem;
+      padding: 2rem 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.875rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .doc-sidebar {
+        display: none;
+      }
+
+      .doc-main {
+        margin-left: 0;
+        padding: 2rem;
+      }
+
+      .doc-hero {
+        margin-left: 0;
+        padding-left: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-effects">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="doc-header">
+    <div class="doc-header-brand">
+      ✨ <span>liqgui</span>
+    </div>
+    <nav class="doc-header-nav">
+      <a href="#getting-started">Docs</a>
+      <a href="https://www.patreon.com/c/bymehul" target="_blank">Donate</a>
+      <a href="https://github.com/bymehul/liqgui" target="_blank">GitHub</a>
+      <glass-button variant="primary" style="--lg-radius: 10px;">Get Started</glass-button>
+    </nav>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="doc-sidebar">
+    <div class="doc-sidebar-section">
+      <div class="doc-sidebar-title">Overview</div>
+      <a class="doc-sidebar-link active" href="#getting-started">Getting Started</a>
+      <a class="doc-sidebar-link" href="#installation">Installation</a>
+      <a class="doc-sidebar-link" href="#theming">Theming</a>
+    </div>
+    <div class="doc-sidebar-section">
+      <div class="doc-sidebar-title">Components</div>
+      <a class="doc-sidebar-link" href="#button">Button</a>
+      <a class="doc-sidebar-link" href="#card">Card</a>
+      <a class="doc-sidebar-link" href="#input">Input</a>
+      <a class="doc-sidebar-link" href="#toggle">Toggle</a>
+      <a class="doc-sidebar-link" href="#slider">Slider</a>
+      <a class="doc-sidebar-link" href="#dropdown">Dropdown</a>
+      <a class="doc-sidebar-link" href="#tabs">Tabs</a>
+      <a class="doc-sidebar-link" href="#modal">Modal</a>
+      <a class="doc-sidebar-link" href="#toast">Toast</a>
+      <a class="doc-sidebar-link" href="#tooltip">Tooltip & Popover</a>
+      <a class="doc-sidebar-link" href="#progress">Progress</a>
+      <a class="doc-sidebar-link" href="#avatar">Avatar</a>
+      <a class="doc-sidebar-link" href="#badge">Badge</a>
+      <a class="doc-sidebar-link" href="#accordion">Accordion</a>
+      <a class="doc-sidebar-link" href="#navbar">Navbar</a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="doc-main">
+    <!-- Hero -->
+    <section class="doc-hero">
+      <h2>liqgui</h2>
+      <p>Glassmorphism components that actually feel good.</p>
+      <div class="doc-hero-buttons">
+        <glass-button variant="primary">Get Started</glass-button>
+        <glass-button variant="outline">View on GitHub</glass-button>
+      </div>
+      <div class="doc-hero-stats">
+        <div class="doc-hero-stat">
+          <div class="doc-hero-stat-value">15</div>
+          <div class="doc-hero-stat-label">Components</div>
+        </div>
+        <div class="doc-hero-stat">
+          <div class="doc-hero-stat-value">0</div>
+          <div class="doc-hero-stat-label">Dependencies</div>
+        </div>
+        <div class="doc-hero-stat">
+          <div class="doc-hero-stat-value">♿</div>
+          <div class="doc-hero-stat-label">Accessible</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Getting Started -->
+    <section class="doc-section" id="getting-started">
+      <h2>Getting Started</h2>
+      <p>liqgui is a framework-agnostic component library built with vanilla TypeScript. It uses Web
+        Components, so it works with any framework or no framework at all.</p>
+
+      <h3 id="installation">Installation</h3>
+      <div class="code-block">
+        <code><span class="code-comment"># npm</span><br>npm install liqgui<br><br><span class="code-comment"># or use directly via CDN</span><br>&lt;script type="module" src="path/to/dist/index.js"&gt;&lt;/script&gt;</code>
+      </div>
+
+      <h3>Quick Setup</h3>
+      <div class="code-block">
+        <code><span class="code-comment">&lt;!-- 1. Include CSS tokens --&gt;</span><br>&lt;<span class="code-tag">link</span> <span class="code-attr">rel</span>=<span class="code-string">"stylesheet"</span> <span class="code-attr">href</span>=<span class="code-string">"liqgui/styles/tokens.css"</span>&gt;<br><br><span class="code-comment">&lt;!-- 2. Import components --&gt;</span><br>&lt;<span class="code-tag">script</span> <span class="code-attr">type</span>=<span class="code-string">"module"</span>&gt;<br>  import 'liqgui';<br>&lt;/<span class="code-tag">script</span>&gt;<br><br><span class="code-comment">&lt;!-- 3. Use components --&gt;</span><br>&lt;<span class="code-tag">glass-button</span> <span class="code-attr">variant</span>=<span class="code-string">"primary"</span>&gt;Click Me&lt;/<span class="code-tag">glass-button</span>&gt;</code>
+      </div>
+    </section>
+
+    <!-- Theming -->
+    <section class="doc-section" id="theming">
+      <h2>Theming</h2>
+      <p>Customize the look and feel using CSS custom properties. Set the theme on the root element.</p>
+
+      <div class="demo-box">
+        <div class="demo-box-title">Theme Toggle Demo</div>
+        <div class="demo-row">
+          <glass-button onclick="document.documentElement.dataset.theme='light'">Light Theme</glass-button>
+          <glass-button onclick="document.documentElement.dataset.theme='dark'">Dark Theme</glass-button>
+        </div>
+      </div>
+
+      <h3>Available CSS Variables</h3>
+      <table class="doc-table">
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Description</th>
+            <th>Default</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--lg-blur</code></td>
+            <td>Backdrop blur amount</td>
+            <td>20px</td>
+          </tr>
+          <tr>
+            <td><code>--lg-radius</code></td>
+            <td>Border radius</td>
+            <td>20px</td>
+          </tr>
+          <tr>
+            <td><code>--lg-bg</code></td>
+            <td>Background color</td>
+            <td>rgba(18, 18, 22, 0.65)</td>
+          </tr>
+          <tr>
+            <td><code>--lg-accent</code></td>
+            <td>Accent gradient</td>
+            <td>Blue gradient</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Button -->
+    <section class="doc-section" id="button">
+      <h2>Button</h2>
+      <p>Versatile button component with multiple variants, loading states, and spring-based press animations.</p>
+
+      <div class="demo-box">
+        <div class="demo-box-title">Variants</div>
+        <div class="demo-row">
+          <glass-button>Default</glass-button>
+          <glass-button variant="primary">Primary</glass-button>
+          <glass-button variant="outline">Outline</glass-button>
+          <glass-button variant="ghost">Ghost</glass-button>
+        </div>
+      </div>
+
+      <div class="demo-box">
+        <div class="demo-box-title">States</div>
+        <div class="demo-row">
+          <glass-button disabled>Disabled</glass-button>
+          <glass-button loading>Loading</glass-button>
+          <glass-button loading variant="primary">Loading</glass-button>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <code>&lt;<span class="code-tag">glass-button</span>&gt;Default&lt;/<span class="code-tag">glass-button</span>&gt;<br>&lt;<span class="code-tag">glass-button</span> <span class="code-attr">variant</span>=<span class="code-string">"primary"</span>&gt;Primary&lt;/<span class="code-tag">glass-button</span>&gt;<br>&lt;<span class="code-tag">glass-button</span> <span class="code-attr">loading</span>&gt;Loading&lt;/<span class="code-tag">glass-button</span>&gt;</code>
+      </div>
+    </section>
+
+    <!-- Card -->
+    <section class="doc-section" id="card">
+      <h2>Card</h2>
+      <p>Glassmorphism card with optional 3D tilt effect on hover and glow animation.</p>
+
+      <div class="demo-grid">
+        <glass-card glow>
+          <h4 style="margin-bottom: 0.5rem;">With Glow</h4>
+          <p style="opacity: 0.7; font-size: 0.9rem;">Hover to see the glow effect and 3D tilt.</p>
+        </glass-card>
+        <glass-card no-tilt>
+          <h4 style="margin-bottom: 0.5rem;">No Tilt</h4>
+          <p style="opacity: 0.7; font-size: 0.9rem;">Static card without tilt effect.</p>
+        </glass-card>
+      </div>
+
+      <div class="code-block">
+        <code>&lt;<span class="code-tag">glass-card</span> <span class="code-attr">glow</span>&gt;Content&lt;/<span class="code-tag">glass-card</span>&gt;<br>&lt;<span class="code-tag">glass-card</span> <span class="code-attr">no-tilt</span>&gt;Static content&lt;/<span class="code-tag">glass-card</span>&gt;</code>
+      </div>
+    </section>
+
+    <!-- Input -->
+    <section class="doc-section" id="input">
+      <h2>Input</h2>
+      <p>Styled text input with focus glow and error state support.</p>
+
+      <div class="demo-box">
+        <div style="max-width: 400px; display: flex; flex-direction: column; gap: 1rem;">
+          <glass-input placeholder="Enter your name"></glass-input>
+          <glass-input type="email" placeholder="Enter your email"></glass-input>
+          <glass-input placeholder="With error" error>
+            <span slot="error">This field is required</span>
+          </glass-input>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <code>&lt;<span class="code-tag">glass-input</span> <span class="code-attr">placeholder</span>=<span class="code-string">"Enter text"</span>&gt;&lt;/<span class="code-tag">glass-input</span>&gt;<br>&lt;<span class="code-tag">glass-input</span> <span class="code-attr">error</span>&gt;<br>  &lt;<span class="code-tag">span</span> <span class="code-attr">slot</span>=<span class="code-string">"error"</span>&gt;Error message&lt;/<span class="code-tag">span</span>&gt;<br>&lt;/<span class="code-tag">glass-input</span>&gt;</code>
+      </div>
+    </section>
+
+    <!-- Toggle -->
+    <section class="doc-section" id="toggle">
+      <h2>Toggle</h2>
+      <p>Switch toggle with spring-animated thumb movement.</p>
+
+      <div class="demo-box">
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <glass-toggle checked>Notifications enabled</glass-toggle>
+          <glass-toggle>Dark mode</glass-toggle>
+          <glass-toggle disabled>Disabled toggle</glass-toggle>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <code>&lt;<span class="code-tag">glass-toggle</span> <span class="code-attr">checked</span>&gt;Label&lt;/<span class="code-tag">glass-toggle</span>&gt;</code>
+      </div>
+    </section>
+
+    <!-- Slider -->
+    <section class="doc-section" id="slider">
+      <h2>Slider</h2>
+      <p>Range slider with touch support, keyboard navigation, and spring physics.</p>
+
+      <div class="demo-box">
+        <div style="max-width: 400px;">
+          <label style="display: block; margin-bottom: 0.5rem; opacity: 0.7;">Volume</label>
+          <glass-slider value="60" min="0" max="100"></glass-slider>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <code>&lt;<span class="code-tag">glass-slider</span> <span class="code-attr">value</span>=<span class="code-string">"50"</span> <span class="code-attr">min</span>=<span class="code-string">"0"</span> <span class="code-attr">max</span>=<span class="code-string">"100"</span>&gt;&lt;/<span class="code-tag">glass-slider</span>&gt;</code>
+      </div>
+    </section>
+
+    <!-- Dropdown -->
+    <section class="doc-section" id="dropdown">
+      <h2>Dropdown</h2>
+      <p>Select dropdown with keyboard navigation and animated menu.</p>
+
+      <div class="demo-box">
+        <glass-dropdown>
+          <span slot="trigger">Select an option</span>
+          <button role="option" data-value="react">React</button>
+          <button role="option" data-value="vue">Vue</button>
+          <button role="option" data-value="angular">Angular</button>
+          <button role="option" data-value="svelte">Svelte</button>
+        </glass-dropdown>
+      </div>
+
+      <div class="code-block">
+        <code>&lt;<span class="code-tag">glass-dropdown</span>&gt;<br>  &lt;<span class="code-tag">span</span> <span class="code-attr">slot</span>=<span class="code-string">"trigger"</span>&gt;Select&lt;/<span class="code-tag">span</span>&gt;<br>  &lt;<span class="code-tag">button</span> <span class="code-attr">role</span>=<span class="code-string">"option"</span>&gt;Option 1&lt;/<span class="code-tag">button</span>&gt;<br>  &lt;<span class="code-tag">button</span> <span class="code-attr">role</span>=<span class="code-string">"option"</span>&gt;Option 2&lt;/<span class="code-tag">button</span>&gt;<br>&lt;/<span class="code-tag">glass-dropdown</span>&gt;</code>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <section class="doc-section" id="tabs">
+      <h2>Tabs</h2>
+      <p>Tab navigation with spring-animated sliding indicator.</p>
+
+      <div class="demo-box">
+        <glass-tabs>
+          <button data-value="overview">Overview</button>
+          <button data-value="features">Features</button>
+          <button data-value="docs">Documentation</button>
+          <button data-value="examples">Examples</button>
+        </glass-tabs>
+      </div>
+
+      <div class="code-block">
+        <code>&lt;<span class="code-tag">glass-tabs</span>&gt;<br>  &lt;<span class="code-tag">button</span> <span class="code-attr">data-value</span>=<span class="code-string">"tab1"</span>&gt;Tab 1&lt;/<span class="code-tag">button</span>&gt;<br>  &lt;<span class="code-tag">button</span> <span class="code-attr">data-value</span>=<span class="code-string">"tab2"</span>&gt;Tab 2&lt;/<span class="code-tag">button</span>&gt;<br>&lt;/<span class="code-tag">glass-tabs</span>&gt;</code>
+      </div>
+    </section>
+
+    <!-- Modal -->
+    <section class="doc-section" id="modal">
+      <h2>Modal</h2>
+      <p>Dialog modal with animated entrance/exit, backdrop blur, and focus trapping.</p>
+
+      <div class="demo-box">
+        <glass-button variant="primary" onclick="document.getElementById('demo-modal').open()">Open Modal</glass-button>
+      </div>
+
+      <div class="code-block">
+        <code>&lt;<span class="code-tag">glass-modal</span> <span class="code-attr">id</span>=<span class="code-string">"my-modal"</span>&gt;<br>  &lt;<span class="code-tag">h2</span>&gt;Modal Title&lt;/<span class="code-tag">h2</span>&gt;<br>  &lt;<span class="code-tag">p</span>&gt;Modal content...&lt;/<span class="code-tag">p</span>&gt;<br>&lt;/<span class="code-tag">glass-modal</span>&gt;<br><br><span class="code-comment">// Open programmatically</span><br>document.getElementById('my-modal').open();</code>
+      </div>
+    </section>
+
+    <!-- Toast -->
+    <section class="doc-section" id="toast">
+      <h2>Toast</h2>
+      <p>Notification toasts with variants, auto-dismiss, and progress indicator.</p>
+
+      <div class="demo-box">
+        <div class="demo-row">
+          <glass-button onclick="GlassToast.show('Information message', 'info')">Info</glass-button>
+          <glass-button onclick="GlassToast.show('Success! Operation complete', 'success')">Success</glass-button>
+          <glass-button onclick="GlassToast.show('Warning: Check your input', 'warning')">Warning</glass-button>
+          <glass-button onclick="GlassToast.show('Error: Something went wrong', 'error')">Error</glass-button>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <code>import { GlassToast } from 'liqgui';<br><br>GlassToast.show('Message', 'success');<br>GlassToast.show('Message', 'error');</code>
+      </div>
+    </section>
+
+    <!-- Tooltip & Popover -->
+    <section class="doc-section" id="tooltip">
+      <h2>Tooltip & Popover</h2>
+      <p>Hover tooltips and click-triggered popovers with 4 position options.</p>
+
+      <div class="demo-box">
+        <div class="demo-box-title">Tooltips (hover)</div>
+        <div class="demo-row">
+          <glass-tooltip position="top">
+            <glass-button>Top</glass-button>
+            <span slot="content">Tooltip on top</span>
+          </glass-tooltip>
+          <glass-tooltip position="right">
+            <glass-button>Right</glass-button>
+            <span slot="content">Tooltip on right</span>
+          </glass-tooltip>
+          <glass-tooltip position="bottom">
+            <glass-button>Bottom</glass-button>
+            <span slot="content">Tooltip on bottom</span>
+          </glass-tooltip>
+          <glass-tooltip position="left">
+            <glass-button>Left</glass-button>
+            <span slot="content">Tooltip on left</span>
+          </glass-tooltip>
+        </div>
+      </div>
+
+      <div class="demo-box">
+        <div class="demo-box-title">Popover (click)</div>
+        <glass-popover position="bottom">
+          <glass-button slot="trigger" variant="primary">Click for Popover</glass-button>
+          <div>
+            <strong>Popover Title</strong>
+            <p style="opacity: 0.7; margin-top: 0.5rem; margin-bottom: 0;">Rich content inside a popover.</p>
+          </div>
+        </glass-popover>
+      </div>
+    </section>
+
+    <!-- Progress -->
+    <section class="doc-section" id="progress">
+      <h2>Progress</h2>
+      <p>Linear and circular progress indicators with indeterminate mode.</p>
+
+      <div class="demo-box">
+        <div class="demo-box-title">Linear</div>
+        <div style="max-width: 400px; display: flex; flex-direction: column; gap: 1.5rem;">
+          <glass-progress value="75" max="100">75% Complete</glass-progress>
+          <glass-progress indeterminate>Loading...</glass-progress>
+        </div>
+      </div>
+
+      <div class="demo-box">
+        <div class="demo-box-title">Circular</div>
+        <div class="demo-row" style="gap: 2rem;">
+          <glass-progress variant="circular" value="65" max="100">65%</glass-progress>
+          <glass-progress variant="circular" value="100" max="100">✓</glass-progress>
+          <glass-progress variant="circular" indeterminate></glass-progress>
+        </div>
+      </div>
+    </section>
+
+    <!-- Avatar -->
+    <section class="doc-section" id="avatar">
+      <h2>Avatar</h2>
+      <p>User avatars with sizes, status indicators, and grouping.</p>
+
+      <div class="demo-box">
+        <div class="demo-box-title">Sizes</div>
+        <div class="demo-row">
+          <glass-avatar size="xs">XS</glass-avatar>
+          <glass-avatar size="sm">SM</glass-avatar>
+          <glass-avatar size="md">MD</glass-avatar>
+          <glass-avatar size="lg">LG</glass-avatar>
+          <glass-avatar size="xl">XL</glass-avatar>
+        </div>
+      </div>
+
+      <div class="demo-box">
+        <div class="demo-box-title">Status</div>
+        <div class="demo-row">
+          <glass-avatar status="online">ON</glass-avatar>
+          <glass-avatar status="away">AW</glass-avatar>
+          <glass-avatar status="busy">BZ</glass-avatar>
+          <glass-avatar status="offline">OF</glass-avatar>
+        </div>
+      </div>
+
+      <div class="demo-box">
+        <div class="demo-box-title">Avatar Group</div>
+        <glass-avatar-group>
+          <glass-avatar>A</glass-avatar>
+          <glass-avatar>B</glass-avatar>
+          <glass-avatar>C</glass-avatar>
+          <glass-avatar>+5</glass-avatar>
+        </glass-avatar-group>
+      </div>
+    </section>
+
+    <!-- Badge -->
+    <section class="doc-section" id="badge">
+      <h2>Badge</h2>
+      <p>Labels, tags, and notification count indicators.</p>
+
+      <div class="demo-box">
+        <div class="demo-box-title">Variants</div>
+        <div class="demo-row">
+          <glass-badge>Default</glass-badge>
+          <glass-badge variant="primary">Primary</glass-badge>
+          <glass-badge variant="success">Success</glass-badge>
+          <glass-badge variant="warning">Warning</glass-badge>
+          <glass-badge variant="error">Error</glass-badge>
+          <glass-badge variant="info">Info</glass-badge>
+        </div>
+      </div>
+
+      <div class="demo-box">
+        <div class="demo-box-title">Count Badges</div>
+        <div class="demo-row">
+          <glass-badge-wrapper count="3">
+            <glass-button>Messages</glass-button>
+          </glass-badge-wrapper>
+          <glass-badge-wrapper count="99" max="50">
+            <glass-button>Notifications</glass-button>
+          </glass-badge-wrapper>
+          <glass-badge-wrapper dot variant="success">
+            <glass-button>Status</glass-button>
+          </glass-badge-wrapper>
+        </div>
+      </div>
+    </section>
+
+    <!-- Accordion -->
+    <section class="doc-section" id="accordion">
+      <h2>Accordion</h2>
+      <p>Collapsible content sections with spring-animated expand/collapse.</p>
+
+      <div class="demo-box">
+        <glass-accordion>
+          <glass-accordion-item open>
+            <span slot="title">What is liqgui?</span>
+            A premium glassmorphism component library built with TypeScript and Web Components. It features spring
+            physics animations and works with any framework.
+          </glass-accordion-item>
+          <glass-accordion-item>
+            <span slot="title">Is it accessible?</span>
+            Yes! All components support keyboard navigation, ARIA attributes, and respect user preferences like reduced
+            motion.
+          </glass-accordion-item>
+          <glass-accordion-item>
+            <span slot="title">Does it have dependencies?</span>
+            No dependencies. It's built with vanilla TypeScript and uses native Web Components.
+          </glass-accordion-item>
+        </glass-accordion>
+      </div>
+    </section>
+
+    <!-- Navbar -->
+    <section class="doc-section" id="navbar">
+      <h2>Navbar</h2>
+      <p>Sticky navigation bar with optional auto-hide on scroll.</p>
+
+      <div class="code-block">
+        <code>&lt;<span class="code-tag">glass-navbar</span> <span class="code-attr">auto-hide</span>&gt;<br>  &lt;<span class="code-tag">span</span> <span class="code-attr">slot</span>=<span class="code-string">"brand"</span>&gt;Brand&lt;/<span class="code-tag">span</span>&gt;<br>  &lt;<span class="code-tag">a</span> <span class="code-attr">href</span>=<span class="code-string">"#"</span>&gt;Link&lt;/<span class="code-tag">a</span>&gt;<br>  &lt;<span class="code-tag">glass-button</span> <span class="code-attr">slot</span>=<span class="code-string">"actions"</span>&gt;CTA&lt;/<span class="code-tag">glass-button</span>&gt;<br>&lt;/<span class="code-tag">glass-navbar</span>&gt;</code>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="doc-footer">
+      <p>Made with ✨ by liqgui — 15 Components</p>
+      <p style="margin-top: 0.5rem;">
+        <a href="https://www.patreon.com/c/bymehul" target="_blank" style="color: #ff424d; text-decoration: none;">❤️
+          Patreon</a>
+        <span style="opacity: 0.5; margin: 0 0.5rem;">•</span>
+        <a href="https://www.paywithchai.in/bymehul" target="_blank" style="color: #ffdd00; text-decoration: none;">☕
+          Chai</a>
+      </p>
+    </footer>
+  </main>
+
+  <!-- Modal -->
+  <glass-modal id="demo-modal">
+    <h2 style="margin-bottom: 1rem;">Welcome to liqgui</h2>
+    <p style="opacity: 0.7; margin-bottom: 1.5rem;">This modal features smooth animations, backdrop blur, focus
+      trapping, and closes with Escape key or clicking outside.</p>
+    <div style="display: flex; gap: 0.75rem;">
+      <glass-button variant="primary" onclick="document.getElementById('demo-modal').close()">Got it!</glass-button>
+      <glass-button variant="ghost" onclick="document.getElementById('demo-modal').close()">Cancel</glass-button>
+    </div>
+  </glass-modal>
+
+  <script type="module">
+    import { GlassToast } from '../dist/index.js';
+    window.GlassToast = GlassToast;
+
+    // Sidebar active state on scroll
+    const sections = document.querySelectorAll('.doc-section');
+    const sidebarLinks = document.querySelectorAll('.doc-sidebar-link');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          sidebarLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${id}`) {
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    }, { rootMargin: '-20% 0px -80% 0px' });
+
+    sections.forEach(section => observer.observe(section));
+  </script>
+</body>
+
+</html>

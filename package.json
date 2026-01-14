@@ -1,0 +1,47 @@
+{
+    "name": "liqgui",
+    "version": "0.1.0",
+    "description": "Premium glassmorphism component library with spring physics animations",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./styles": "./src/styles/tokens.css"
+    },
+    "files": [
+        "dist",
+        "src/styles"
+    ],
+    "scripts": {
+        "build": "tsc",
+        "prepublishOnly": "npm run build"
+    },
+    "keywords": [
+        "glassmorphism",
+        "ui",
+        "components",
+        "web-components",
+        "spring-physics",
+        "animations",
+        "glass",
+        "css",
+        "typescript"
+    ],
+    "author": "bymehul",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/bymehul/liqgui"
+    },
+    "homepage": "https://bymehul.github.io/liqgui",
+    "bugs": {
+        "url": "https://github.com/bymehul/liqgui/issues"
+    },
+    "devDependencies": {
+        "typescript": "^5.9.3"
+    }
+}

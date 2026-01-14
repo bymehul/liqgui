@@ -1,0 +1,140 @@
+/*
+CSS
+ */
+
+:root {
+  /* Blur & Radius */
+  --lg-blur: 20px;
+  --lg-radius: 20px;
+  --lg-radius-sm: 12px;
+  --lg-radius-lg: 28px;
+
+  /* Background Colors */
+  --lg-bg-light: rgba(255, 255, 255, 0.18);
+  --lg-bg-dark: rgba(18, 18, 22, 0.65);
+  --lg-bg: var(--lg-bg-dark);
+
+  /* Border */
+  --lg-border: rgba(255, 255, 255, 0.18);
+  --lg-border-hover: rgba(255, 255, 255, 0.35);
+
+  /* Shadows */
+  --lg-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  --lg-shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.25);
+  --lg-shadow-lg: 0 30px 70px rgba(0, 0, 0, 0.45);
+
+  /* Accent Gradients */
+  --lg-accent-blue: linear-gradient(135deg, #5ac8fa 0%, #007aff 100%);
+  --lg-accent-purple: linear-gradient(135deg, #bf5af2 0%, #5856d6 100%);
+  --lg-accent-green: linear-gradient(135deg, #30d158 0%, #34c759 100%);
+  --lg-accent-orange: linear-gradient(135deg, #ff9f0a 0%, #ff6b00 100%);
+  --lg-accent-pink: linear-gradient(135deg, #ff375f 0%, #ff2d55 100%);
+  --lg-accent-teal: linear-gradient(135deg, #64d2ff 0%, #00c7be 100%);
+
+  /* Default accent */
+  --lg-accent: var(--lg-accent-blue);
+  --lg-accent-focus: #5ac8fa;
+
+  /* Typography */
+  --lg-font: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+  --lg-font-mono: 'SF Mono', 'Fira Code', monospace;
+
+  /* Spacing */
+  --lg-space-xs: 0.25rem;
+  --lg-space-sm: 0.5rem;
+  --lg-space-md: 1rem;
+  --lg-space-lg: 1.5rem;
+  --lg-space-xl: 2rem;
+
+  /* Transitions */
+  --lg-transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --lg-transition: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --lg-transition-slow: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Light theme */
+:root[data-theme="light"] {
+  --lg-bg: var(--lg-bg-light);
+  --lg-border: rgba(0, 0, 0, 0.1);
+  --lg-border-hover: rgba(0, 0, 0, 0.2);
+}
+
+/* Dark theme (default) */
+:root[data-theme="dark"] {
+  --lg-bg: var(--lg-bg-dark);
+}
+
+/* Accessibility: Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --lg-transition-fast: 0ms;
+    --lg-transition: 0ms;
+    --lg-transition-slow: 0ms;
+  }
+}
+
+/* Accessibility: Reduced transparency */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --lg-blur: 0px;
+    --lg-bg-light: rgba(255, 255, 255, 0.95);
+    --lg-bg-dark: rgba(18, 18, 22, 0.95);
+  }
+}
+
+/* Global keyframes */
+@keyframes lg-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lg-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes lg-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lg-shimmer {
+  from {
+    background-position: -200% 0;
+  }
+
+  to {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes lg-pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
