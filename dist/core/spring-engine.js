@@ -1,4 +1,4 @@
-// Premium spring presets
+// Spring presets
 export const liquidSpring = {
     stiffness: 170,
     damping: 26,
@@ -53,7 +53,7 @@ export function springAnimate(from, to, onUpdate, config = liquidSpring, onCompl
         cancelAnimationFrame(rafId);
     };
 }
-// Multi-value spring animation
+// Multi-value spring
 export function springAnimateMulti(from, to, onUpdate, config = liquidSpring, onComplete) {
     const values = [...from];
     const velocities = from.map(() => 0);

@@ -1,4 +1,4 @@
-// Glow effect CSS generator for glass elements
+// Glow effect CSS
 export const glowCSS = (accent) => `
   position: absolute;
   inset: -2px;
@@ -10,7 +10,7 @@ export const glowCSS = (accent) => `
   z-index: -1;
   border-radius: inherit;
 `;
-// Create ripple effect on element
+// Ripple effect
 export function createRipple(event, element, color = "rgba(255, 255, 255, 0.4)") {
     const rect = element.getBoundingClientRect();
     const size = Math.max(rect.width, rect.height) * 2;
@@ -35,7 +35,7 @@ export function createRipple(event, element, color = "rgba(255, 255, 255, 0.4)")
     element.appendChild(ripple);
     ripple.addEventListener("animationend", () => ripple.remove());
 }
-// Inject ripple keyframes if not present
+// Inject ripple keyframes
 export function injectRippleStyles() {
     if (document.getElementById("lg-ripple-styles"))
         return;
@@ -51,7 +51,7 @@ export function injectRippleStyles() {
     `;
     document.head.appendChild(style);
 }
-// Initialize ripple styles on load
+// Init on load
 if (typeof document !== "undefined") {
     injectRippleStyles();
 }
