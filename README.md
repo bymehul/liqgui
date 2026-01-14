@@ -5,7 +5,7 @@
 
 Glassmorphism UI components that actually feel good. Built with spring physics.
 
-**[📖 Docs & Demo](https://bymehul.github.io/liqgui/demo/index.html)**
+**[📖 Docs & Demo](https://bymehul.github.io/liqgui/docs/index.html)**
 
 ## Why this exists
 
