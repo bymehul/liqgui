@@ -39,6 +39,7 @@ export class GlassModal extends BaseElement {
                 background: rgba(0, 0, 0, 0.6);
                 backdrop-filter: blur(4px);
                 -webkit-backdrop-filter: blur(4px);
+                will-change: opacity;
             }
             .panel {
                 position: relative;
@@ -49,7 +50,8 @@ export class GlassModal extends BaseElement {
                 border: 1px solid var(--lg-border);
                 box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
                 padding: 2rem;
-                min-width: 320px;
+                width: min(100% - 2rem, 500px);
+                min-width: min(320px, 90vw);
                 max-width: 90vw;
                 max-height: 85vh;
                 overflow: auto;

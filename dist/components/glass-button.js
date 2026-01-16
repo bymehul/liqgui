@@ -1,6 +1,6 @@
 import { BaseElement } from "../core/base-element.js";
 import { glowCSS, createRipple } from "../core/glow.js";
-import { springAnimate, bouncySpring } from "../core/spring-engine.js";
+import { springAnimate, snappySpring } from "../core/spring-engine.js";
 export class GlassButton extends BaseElement {
     static get observedAttributes() {
         return ["variant", "disabled", "loading"];
@@ -33,13 +33,14 @@ export class GlassButton extends BaseElement {
                 cursor: pointer;
                 overflow: hidden;
                 transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+                will-change: transform; 
             }
             button:hover {
                 border-color: rgba(255, 255, 255, 0.5);
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             }
             button:focus-visible {
-                outline: 2px solid var(--lg-accent-focus, #5ac8fa);
+                outline: 2px solid var(--lg-accent-focus);
                 outline-offset: 2px;
             }
             button:disabled {
@@ -98,14 +99,14 @@ export class GlassButton extends BaseElement {
         const btn = this.root.querySelector("button");
         // Spring press animation
         btn.addEventListener("mousedown", () => {
-            springAnimate(1, 0.95, v => btn.style.transform = `scale(${v})`, bouncySpring);
+            springAnimate(1, 0.96, v => btn.style.transform = `scale(${v})`, snappySpring);
         });
         btn.addEventListener("mouseup", () => {
-            springAnimate(0.95, 1, v => btn.style.transform = `scale(${v})`, bouncySpring);
+            springAnimate(0.96, 1, v => btn.style.transform = `scale(${v})`, snappySpring);
         });
         btn.addEventListener("mouseleave", () => {
             var _a, _b;
-            springAnimate(parseFloat(((_b = (_a = btn.style.transform) === null || _a === void 0 ? void 0 : _a.match(/scale\(([\d.]+)\)/)) === null || _b === void 0 ? void 0 : _b[1]) || "1"), 1, v => btn.style.transform = `scale(${v})`, bouncySpring);
+            springAnimate(parseFloat(((_b = (_a = btn.style.transform) === null || _a === void 0 ? void 0 : _a.match(/scale\(([\d.]+)\)/)) === null || _b === void 0 ? void 0 : _b[1]) || "1"), 1, v => btn.style.transform = `scale(${v})`, snappySpring);
         });
         // Ripple effect
         btn.addEventListener("click", (e) => {

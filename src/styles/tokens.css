@@ -33,7 +33,8 @@ CSS
 
   /* Default accent */
   --lg-accent: var(--lg-accent-blue);
-  --lg-accent-focus: #5ac8fa;
+  --lg-accent-focus: rgba(90, 200, 250, 0.5);
+  --lg-focus-ring: 0 0 0 4px var(--lg-accent-focus);
 
   /* Typography */
   --lg-font: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
