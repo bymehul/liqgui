@@ -22,7 +22,7 @@ export class GlassTabs extends BaseElement {
                 background: var(--lg-bg);
                 backdrop-filter: blur(var(--lg-blur));
                 -webkit-backdrop-filter: blur(var(--lg-blur));
-                border-radius: var(--lg-radius);
+                border-radius: 999px;
                 border: 1px solid var(--lg-border);
             }
             .indicator {
@@ -30,13 +30,11 @@ export class GlassTabs extends BaseElement {
                 top: 0.25rem;
                 bottom: 0.25rem;
                 left: 0;
-                width: 1px; /* Base width for scaling */
                 background: rgba(255, 255, 255, 0.15);
-                border-radius: calc(var(--lg-radius) - 4px);
+                border-radius: 999px;
                 transition: none;
                 pointer-events: none;
-                transform-origin: 0 0;
-                will-change: transform;
+                will-change: transform, width;
             }
             ::slotted(button) {
                 position: relative;
@@ -46,7 +44,7 @@ export class GlassTabs extends BaseElement {
                 color: inherit;
                 font: inherit;
                 cursor: pointer;
-                border-radius: calc(var(--lg-radius) - 4px);
+                border-radius: 999px;
                 opacity: 0.7;
                 transition: opacity 0.2s;
                 z-index: 1;
@@ -86,31 +84,22 @@ export class GlassTabs extends BaseElement {
         const containerRect = this.getBoundingClientRect();
         const relativeLeft = rect.left - containerRect.left;
         const width = rect.width;
-        // We want to animate from current transform to new transform
-        // New transform: translate(relativeLeft px) scaleX(width)
-        // Note: The indicator has base width 1px, so scaleX = target width
         if (animate && this.indicator) {
-            // Get current transform values
+            // Get current values
             const style = window.getComputedStyle(this.indicator);
             const matrix = new DOMMatrix(style.transform);
             const currentX = matrix.e;
-            const currentScale = matrix.a;
+            const currentWidth = this.indicator.getBoundingClientRect().width;
             springAnimate(currentX, relativeLeft, v => {
-                const currentWidth = parseFloat(this.indicator.getAttribute('data-width') || '0');
-                // We need to synchronize the two animations, but springAnimate runs independently.
-                // A better approach for concurrent related springs is needed, 
-                // but for now we'll rely on the fact that both use the same physics config.
-                this.indicator.style.transform = `translateX(${v}px) scaleX(${currentWidth})`;
+                this.indicator.style.transform = `translateX(${v}px)`;
             }, snappySpring);
-            springAnimate(currentScale, width, v => {
-                const currentPos = new DOMMatrix(getComputedStyle(this.indicator).transform).e;
-                this.indicator.setAttribute('data-width', v.toString());
-                this.indicator.style.transform = `translateX(${currentPos}px) scaleX(${v})`;
+            springAnimate(currentWidth, width, v => {
+                this.indicator.style.width = `${v}px`;
             }, snappySpring);
         }
         else if (this.indicator) {
-            this.indicator.setAttribute('data-width', width.toString());
-            this.indicator.style.transform = `translateX(${relativeLeft}px) scaleX(${width})`;
+            this.indicator.style.width = `${width}px`;
+            this.indicator.style.transform = `translateX(${relativeLeft}px)`;
         }
         // Dispatch event
         this.dispatchEvent(new CustomEvent("change", {
